@@ -11,7 +11,9 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "admin:create": "tsx src/scripts/create-admin.ts",
+    "admin:create:prod": "node dist/scripts/create-admin.js"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.1",
