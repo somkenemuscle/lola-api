@@ -21,6 +21,9 @@ const envSchema = z.object({
   REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().positive().default(30),
   // Set in production (e.g. ".lolaadeoti.com") so cookies are shared by the API's sibling subdomains.
   COOKIE_DOMAIN: z.string().optional(),
+  CLOUDINARY_CLOUD_NAME: z.string().min(1),
+  CLOUDINARY_API_KEY: z.string().min(1),
+  CLOUDINARY_API_SECRET: z.string().min(1),
 })
 
 const parsed = envSchema.safeParse(process.env)
