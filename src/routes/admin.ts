@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { requireAdmin } from '../middleware/require-admin.js'
 import { requireAuth } from '../middleware/require-auth.js'
+import { customersRouter } from '../modules/customers/customers.routes.js'
 import { adminProductsRouter } from '../modules/products/products.routes.js'
 import { uploadsRouter } from '../modules/uploads/uploads.routes.js'
 
@@ -10,4 +11,5 @@ export const adminRouter = Router()
 adminRouter.use(requireAuth, requireAdmin)
 
 adminRouter.use('/products', adminProductsRouter)
+adminRouter.use('/customers', customersRouter)
 adminRouter.use('/uploads', uploadsRouter)
