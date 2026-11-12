@@ -1,3 +1,4 @@
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
 import helmet from 'helmet'
@@ -10,9 +11,16 @@ import { apiRouter } from './routes/index.js'
 export function createApp() {
   const app = express()
 
+  // Behind Render's proxy: trust its X-Forwarded-For so rate limiting sees real client IPs.
+  if (env.NODE_ENV === 'production') {
+    app.set('trust proxy', 1)
+  }
+
   app.use(helmet())
-  app.use(cors({ origin: env.CORS_ORIGINS, credentials: true }))
+  // maxAge lets browsers cache the CORS preflight instead of repeating it before every request.
+  app.use(cors({ origin: env.CORS_ORIGINS, credentials: true, maxAge: 600 }))
   app.use(express.json())
+  app.use(cookieParser())
   app.use(morgan(env.NODE_ENV === 'production' ? 'combined' : 'dev'))
 
   app.use('/api/v1', apiRouter)

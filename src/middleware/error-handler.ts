@@ -8,11 +8,13 @@ export const errorHandler: ErrorRequestHandler = (err, _req, res, next) => {
   }
 
   const status = isHttpError(err) ? err.status : 500
-  const message = isHttpError(err) && err.expose ? err.message : 'Internal server error'
+  const exposed = isHttpError(err) && err.expose
+  const message = exposed ? err.message : 'Internal server error'
+  const details = exposed ? err.details : undefined
 
   if (status >= 500) {
     console.error(err)
   }
 
-  res.status(status).json({ error: { message } })
+  res.status(status).json({ error: { message, details } })
 }

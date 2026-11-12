@@ -16,6 +16,11 @@ const envSchema = z.object({
         .map((origin) => origin.trim())
         .filter(Boolean),
     ),
+  JWT_ACCESS_SECRET: z.string().min(32),
+  ACCESS_TOKEN_TTL_MINUTES: z.coerce.number().int().positive().default(15),
+  REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().positive().default(30),
+  // Set in production (e.g. ".lolaadeoti.com") so cookies are shared by the API's sibling subdomains.
+  COOKIE_DOMAIN: z.string().optional(),
 })
 
 const parsed = envSchema.safeParse(process.env)
