@@ -10,3 +10,14 @@ export function parseOrThrow<T extends z.ZodType>(schema: T, data: unknown, mess
 
   return result.data
 }
+
+// A malformed ID can't match any record, so it is reported as not found rather than invalid.
+export function parseIdOrNotFound(id: unknown, notFoundMessage: string) {
+  const result = z.uuid().safeParse(id)
+
+  if (!result.success) {
+    throw createHttpError(404, notFoundMessage)
+  }
+
+  return result.data
+}

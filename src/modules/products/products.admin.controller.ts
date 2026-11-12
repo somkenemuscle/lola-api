@@ -1,20 +1,11 @@
 import type { Request, RequestHandler } from 'express'
-import createHttpError from 'http-errors'
-import { z } from 'zod'
 import { paginationSchema } from '../../lib/pagination.js'
-import { parseOrThrow } from '../../lib/validation.js'
+import { parseIdOrNotFound, parseOrThrow } from '../../lib/validation.js'
 import type { CreateProductInput, UpdateProductInput } from './products.schemas.js'
 import * as productsService from './products.service.js'
 
-// A malformed ID can't match any product, so it is reported as not found.
 function productId(req: Request) {
-  const result = z.uuid().safeParse(req.params.id)
-
-  if (!result.success) {
-    throw createHttpError(404, 'Product not found')
-  }
-
-  return result.data
+  return parseIdOrNotFound(req.params.id, 'Product not found')
 }
 
 export const list: RequestHandler = async (req, res) => {
